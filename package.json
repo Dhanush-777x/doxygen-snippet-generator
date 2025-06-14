@@ -1,0 +1,49 @@
+{
+  "name": "doxygen-snippet-generator",
+  "displayName": "doxygen-snippet-generator",
+  "description": "Doxygen Snippet Adder is a Visual Studio Code extension that helps developers streamline the process of managing code snippets for Doxygen documentation.",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.101.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "doxygen-snippet-generator.addSnippets",
+        "title": "Add to Doxygen Snippet"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "doxygen-snippet-generator.addSnippets",
+          "when": "editorTextFocus && editorHasSelection",
+          "group": "navigation"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.101.0",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "20.x",
+    "@typescript-eslint/eslint-plugin": "^8.31.1",
+    "@typescript-eslint/parser": "^8.31.1",
+    "eslint": "^9.25.1",
+    "typescript": "^5.8.3",
+    "@vscode/test-cli": "^0.0.10",
+    "@vscode/test-electron": "^2.5.2"
+  }
+}

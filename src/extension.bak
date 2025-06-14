@@ -1,0 +1,57 @@
+import * as vscode from 'vscode';
+import * as fs from 'fs';
+import * as path from 'path';
+
+export function activate(context: vscode.ExtensionContext) {
+  let disposable = vscode.commands.registerCommand('doxygen-snippet-generator.addSnippets', async () => {
+    const editor = vscode.window.activeTextEditor;
+    if (!editor) return;
+
+    const selection = editor.document.getText(editor.selection);
+    if (!selection.trim()) return;
+
+    const snippetName = await vscode.window.showInputBox({
+      prompt: 'Enter snippet name',
+      placeHolder: 'e.g., CLK_INIT_BLOCK',
+    });
+    if (!snippetName) return;
+
+    const workspaceFolders = vscode.workspace.workspaceFolders;
+    if (!workspaceFolders) {
+      vscode.window.showErrorMessage('Please open a workspace first.');
+      return;
+    }
+
+    const workspaceRoot = workspaceFolders[0].uri.fsPath;
+    const snippetDir = path.join(workspaceRoot, 'snippets');
+    const snippetFile = path.join(snippetDir, 'snippets.c');
+
+    // Ensure folder exists
+    if (!fs.existsSync(snippetDir)) fs.mkdirSync(snippetDir);
+
+    // Read existing content if any
+    let fileContent = '';
+    if (fs.existsSync(snippetFile)) {
+      fileContent = fs.readFileSync(snippetFile, 'utf8');
+    }
+
+    // Check if snippet with same name exists
+    const snippetMarker = `//![${snippetName}]`;
+    if (fileContent.includes(snippetMarker)) {
+      vscode.window.showWarningMessage(`Snippet "${snippetName}" already exists in snippets/snippet.c`);
+      return;
+    }
+
+    // Prepare snippet format using //![name] style
+    const snippetCommentStart = `//![${snippetName}]\n`;
+    const snippetCommentEnd = `//![${snippetName}]\n`;
+    const snippetContent = `${selection}\n\n`;
+
+    // Append snippet
+    fs.appendFileSync(snippetFile, `\n${snippetCommentStart}${snippetContent}${snippetCommentEnd}`);
+
+    vscode.window.showInformationMessage(`Snippet "${snippetName}" added to snippets/snippet.c`);
+  });
+
+  context.subscriptions.push(disposable);
+}
