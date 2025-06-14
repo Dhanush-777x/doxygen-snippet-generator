@@ -2,7 +2,7 @@
   "name": "doxygen-snippet-generator",
   "displayName": "Doxygen Snippet Generator",
   "publisher": "dhanush-sm",
-  "description": "Doxygen Snippet Adder is a Visual Studio Code extension that helps developers streamline the process of managing code snippets for Doxygen documentation.",
+  "description": "Doxygen Snippet Generator is a Visual Studio Code extension that helps developers streamline the process of managing code snippets for Doxygen documentation.",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.101.0"
